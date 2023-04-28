@@ -10,6 +10,9 @@ const { email, message } = refs;
 const LOCAL_STORAGE_DATA = 'feedback-form-state';
 let formData = {};
 
+email.setAttribute('required', '');
+message.setAttribute('required', '');
+
 const saveInputData = ({ target }) => {
   const { name, value } = target;
   formData[name] = value;
