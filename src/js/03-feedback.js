@@ -31,10 +31,15 @@ function updateInputData() {
   let persistedData = localStorage.getItem(LOCAL_STORAGE_DATA);
 
   if (persistedData) {
-    persistedData = JSON.parse(persistedData);
-    Object.entries(persistedData).forEach(([name, value]) => {
-      feedbackForm.elements[name].value = value;
-    });
+    try {
+      persistedData = JSON.parse(persistedData);
+      Object.entries(persistedData).forEach(([name, value]) => {
+        feedbackForm.elements[name].value = value;
+      });
+    } catch (error) {
+      console.log(error.name); // "SyntaxError"
+      console.log(error.message); // Unexpected token W in JSON at position 0
+    }
   }
 }
 
@@ -47,7 +52,7 @@ function formSubmit(evt) {
   const formData = new FormData(feedbackForm);
 
   formData.forEach((value, key) => {
-    console.log(key, value)
+    console.log(key, value);
     formDataObj[key] = value;
   });
 
