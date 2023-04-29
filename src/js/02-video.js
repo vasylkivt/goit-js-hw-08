@@ -17,5 +17,9 @@ function saveCornetTime(data) {
 }
 
 function updateCornetTime() {
-  player.setCurrentTime(localStorage.getItem(LOCAL_STORAGE_TIME) || 0);
+  const persistedData = localStorage.getItem(LOCAL_STORAGE_TIME);
+
+  if (persistedData) {
+    player.setCurrentTime(localStorage.getItem(LOCAL_STORAGE_TIME));
+  }
 }
