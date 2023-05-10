@@ -12,14 +12,20 @@ updateCornetTime();
 
 player.on('timeupdate', throttle(saveCornetTime, 1000));
 
-function saveCornetTime(data) {
-  localStorage.setItem(LOCAL_STORAGE_TIME, data.seconds);
+function saveCornetTime({ seconds }) {
+  localStorage.setItem(LOCAL_STORAGE_TIME, JSON.stringify(seconds));
 }
 
 function updateCornetTime() {
-  const persistedData = localStorage.getItem(LOCAL_STORAGE_TIME);
+  let persistedData;
+
+  try {
+    persistedData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_TIME));
+  } catch (error) {
+    console.log(error.name);
+  }
 
   if (persistedData) {
-    player.setCurrentTime(localStorage.getItem(LOCAL_STORAGE_TIME));
+    player.setCurrentTime(persistedData);
   }
 }
