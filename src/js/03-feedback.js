@@ -12,15 +12,20 @@ feedbackForm.addEventListener('submit', formSubmit);
 feedbackForm.addEventListener('input', throttle(saveInputData, 500));
 
 //?Ця функція отримує подію evt від обробника введення даних форми. Вона отримує збережені дані з локального сховища, парсить їх в об'єкт або створює новий порожній об'єкт, додає значення введеного поля до об'єкту збережених даних за ключем evt.target.name, а потім зберігає оновлені дані в локальному сховищі у форматі JSON.
-function saveInputData(evt) {
+function saveInputData({ target: { name, value } }) {
   // Отримуємо збережені дані з локального сховища
   let persistedData = localStorage.getItem(LOCAL_STORAGE_DATA);
 
   // Перевіряємо, чи є збережені дані і парсимо їх з формату JSON в об'єкт, або створимо новий об'єкт
-  persistedData = persistedData ? JSON.parse(persistedData) : {};
+  try {
+    persistedData = persistedData ? JSON.parse(persistedData) : {};
+  } catch (error) {
+    console.log(error.name);
+    console.log(error.message);
+  }
 
   // Зберігаємо значення введених даних для поточного елемента форми в об'єкт збережених даних
-  persistedData[evt.target.name] = evt.target.value;
+  persistedData[name] = value;
 
   // Зберігаємо оновлені дані в локальному сховищі у форматі JSON
   localStorage.setItem(LOCAL_STORAGE_DATA, JSON.stringify(persistedData));
@@ -29,17 +34,20 @@ function saveInputData(evt) {
 //?Ця функція отримує збережені дані з локального сховища за ключем LOCAL_STORAGE_DATA. Якщо дані існують, вони парсяться з формату JSON у вигляді об'єкта. Потім функція проходить по кожній парі ключ-значення в об'єкті збережених даних і встановлює значення поля форми відповідно до ключа name.
 function updateInputData() {
   let persistedData = localStorage.getItem(LOCAL_STORAGE_DATA);
-
-  if (persistedData) {
-    try {
-      persistedData = JSON.parse(persistedData);
-      Object.entries(persistedData).forEach(([name, value]) => {
-        feedbackForm.elements[name].value = value;
-      });
-    } catch (error) {
-      console.log(error.name); // "SyntaxError"
-      console.log(error.message); // Unexpected token W in JSON at position 0
-    }
+  // if (persistedData) {
+  //   persistedData = JSON.parse(persistedData);
+  //   Object.entries(persistedData).forEach(([name, value]) => {
+  //     feedbackForm.elements[name].value = value;
+  //   });
+  // }
+  try {
+    persistedData = JSON.parse(persistedData);
+    Object.entries(persistedData).forEach(([name, value]) => {
+      feedbackForm.elements[name].value = value;
+    });
+  } catch (error) {
+    console.log(error.name);
+    console.log(error.message);
   }
 }
 
