@@ -11,7 +11,10 @@ updateInputData();
 feedbackForm.addEventListener('submit', formSubmit);
 feedbackForm.addEventListener('input', throttle(saveInputData, 500));
 
-//?Ця функція отримує подію evt від обробника введення даних форми. Вона отримує збережені дані з локального сховища, парсить їх в об'єкт або створює новий порожній об'єкт, додає значення введеного поля до об'єкту збережених даних за ключем evt.target.name, а потім зберігає оновлені дані в локальному сховищі у форматі JSON.
+/**
+ *? Зберігає введені дані з полів у локальне сховище
+ * @param {Event} event - Об'єкт події input
+ */
 function saveInputData({ target: { name, value } }) {
   // Отримуємо збережені дані з локального сховища
   let persistedData = localStorage.getItem(LOCAL_STORAGE_DATA);
@@ -31,7 +34,9 @@ function saveInputData({ target: { name, value } }) {
   localStorage.setItem(LOCAL_STORAGE_DATA, JSON.stringify(persistedData));
 }
 
-//?Ця функція отримує збережені дані з локального сховища за ключем LOCAL_STORAGE_DATA. Якщо дані існують, вони парсяться з формату JSON у вигляді об'єкта. Потім функція проходить по кожній парі ключ-значення в об'єкті збережених даних і встановлює значення поля форми відповідно до ключа name.
+/**
+ *? Оновлює дані полів форми з локального сховища,функція проходить по кожній парі ключ-значення в об'єкті збережених даних і встановлює значення поля форми відповідно до ключа name.
+ */
 function updateInputData() {
   let persistedData = localStorage.getItem(LOCAL_STORAGE_DATA);
 
@@ -48,7 +53,10 @@ function updateInputData() {
   }
 }
 
-//? Ця функція виконується під час подання форми. Вона перешкоджає стандартному поведінці форми за допомогою e.preventDefault(). Потім вона видаляє збережені дані з локального сховища, і обробляє потрібні дані
+/**
+ *? Обробляє подію submit форми. Потім вона видаляє збережені дані з локального сховища, і обробляє потрібні дані
+ * @param {Event} evt - Об'єкт події submit
+ */
 function formSubmit(evt) {
   evt.preventDefault();
   localStorage.removeItem(LOCAL_STORAGE_DATA);
