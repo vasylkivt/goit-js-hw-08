@@ -34,18 +34,15 @@ function saveInputData({ target: { name, value } }) {
 //?Ця функція отримує збережені дані з локального сховища за ключем LOCAL_STORAGE_DATA. Якщо дані існують, вони парсяться з формату JSON у вигляді об'єкта. Потім функція проходить по кожній парі ключ-значення в об'єкті збережених даних і встановлює значення поля форми відповідно до ключа name.
 function updateInputData() {
   let persistedData = localStorage.getItem(LOCAL_STORAGE_DATA);
-  // if (persistedData) {
-  //   persistedData = JSON.parse(persistedData);
-  //   Object.entries(persistedData).forEach(([name, value]) => {
-  //     feedbackForm.elements[name].value = value;
-  //   });
-  // }
+
   try {
     persistedData = JSON.parse(persistedData);
+
     Object.entries(persistedData).forEach(([name, value]) => {
       feedbackForm.elements[name].value = value;
     });
   } catch (error) {
+    localStorage.removeItem(LOCAL_STORAGE_DATA);
     console.log(error.name);
     console.log(error.message);
   }
